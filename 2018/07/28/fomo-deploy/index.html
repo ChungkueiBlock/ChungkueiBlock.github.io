@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"right","Pisces | Gemini":240,"display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="fomo3d-上线部署要点fomo3d游戏一出，国内疯狂clone上线，这里谈下我上线的方法（纯手动的^_^，落伍了） 通过原版合约地址，可以一层一层的拔下所有涉及到的合约代码。 目前据我统计共有8个合约，其中有两个闭源合约：  F3DexternalSettingsInterface JIincInterfaceForForwarder">
+<meta name="keywords" content="fomo3d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fomo3d-上线部署要点">
+<meta property="og:url" content="http://yoursite.com/2018/07/28/fomo-deploy/index.html">
+<meta property="og:site_name" content="Chungkuei区块链">
+<meta property="og:description" content="fomo3d-上线部署要点fomo3d游戏一出，国内疯狂clone上线，这里谈下我上线的方法（纯手动的^_^，落伍了） 通过原版合约地址，可以一层一层的拔下所有涉及到的合约代码。 目前据我统计共有8个合约，其中有两个闭源合约：  F3DexternalSettingsInterface JIincInterfaceForForwarder">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/uploads/fomo3d/fomo-deploy/p3d-deploy.jpg">
+<meta property="og:image" content="http://yoursite.com/uploads/fomo3d/fomo-deploy/fomo3d-online.png">
+<meta property="og:updated_time" content="2018-08-01T08:37:07.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fomo3d-上线部署要点">
+<meta name="twitter:description" content="fomo3d-上线部署要点fomo3d游戏一出，国内疯狂clone上线，这里谈下我上线的方法（纯手动的^_^，落伍了） 通过原版合约地址，可以一层一层的拔下所有涉及到的合约代码。 目前据我统计共有8个合约，其中有两个闭源合约：  F3DexternalSettingsInterface JIincInterfaceForForwarder">
+<meta name="twitter:image" content="http://yoursite.com/uploads/fomo3d/fomo-deploy/p3d-deploy.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/28/fomo-deploy/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>fomo3d-上线部署要点 | Chungkuei区块链</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chungkuei区块链</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">去伪求真</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/28/fomo-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ChungkueiBlock">
+      <meta itemprop="description" content="区块链技术">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/41499501?s=200&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chungkuei区块链">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">fomo3d-上线部署要点
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-28 13:36:53" itemprop="dateCreated datePublished" datetime="2018-07-28T13:36:53+08:00">2018-07-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-01 16:37:07" itemprop="dateModified" datetime="2018-08-01T16:37:07+08:00">2018-08-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/fomo3d/" itemprop="url" rel="index"><span itemprop="name">fomo3d</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="fomo3d-上线部署要点"><a href="#fomo3d-上线部署要点" class="headerlink" title="fomo3d-上线部署要点"></a>fomo3d-上线部署要点</h2><p>fomo3d游戏一出，国内疯狂clone上线，这里谈下我上线的方法（纯手动的^_^，落伍了）</p>
+<p>通过<a href="https://etherscan.io/address/0xa62142888aba8370742be823c1782d17a0389da1#code" target="_blank" rel="noopener">原版合约地址</a>，可以一层一层的拔下所有涉及到的合约代码。</p>
+<p>目前据我统计共有8个合约，其中有两个闭源合约：</p>
+<ul>
+<li>F3DexternalSettingsInterface</li>
+<li>JIincInterfaceForForwarder</li>
+</ul>
+<a id="more"></a>
+<p>闭源合约不可怕，看明白什么功能，自己hack掉是不影响游戏本身的。</p>
+<pre><code>提前预警，合约的内容细节还是要自己研究的，没时间写太细，
+我个人猜测，目前能看到只是TeamJust规划的一小部分。
+</code></pre><p>其实这个游戏本身只需要2个合约就可以跑起来，且没实质影响，只是单纯改变了部分利益分配方式。</p>
+<p>下面说明，我尽可能少改动原版的情况下，部署上线合约，修改后的原版合约代码<a href="https://github.com/ChungkueiBlock/sols/tree/master/fomo3d" target="_blank" rel="noopener">在这里</a></p>
+<h3 id="部署前的准备"><a href="#部署前的准备" class="headerlink" title="部署前的准备"></a>部署前的准备</h3><p>我一般使用<a href="https://remix.ethereum.org/#optimize=true&amp;version=soljson-v0.4.24" target="_blank" rel="noopener">在线remix</a>工具部署合约在自己的私链上调试，私链建议如下启动（一键解万忧的方式，推荐创世块采用<a href="https://github.com/ChungkueiBlock/tools/privateEth" target="_blank" rel="noopener">POA共识</a>-不消耗CPU），这样可以使用remix的debug功能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">/home/xxp/Software/bin/geth  \</span><br><span class="line">    --datadir ./node0\</span><br><span class="line">    --ws\</span><br><span class="line">    --wsaddr 0.0.0.0\</span><br><span class="line">    --wsapi &quot;eth,net,web3,admin,personal,txpool,miner,clique,debug&quot;\</span><br><span class="line">    --wsport 8546\</span><br><span class="line">    --wsorigins &quot;*&quot;\</span><br><span class="line">    --rpc\</span><br><span class="line">    --rpcapi &quot;eth,net,web3,admin,personal,txpool,miner,clique,debug&quot;\</span><br><span class="line">    --rpccorsdomain &quot;*&quot;\</span><br><span class="line">    --rpcaddr 0.0.0.0\</span><br><span class="line">    --rpcport 8545\</span><br><span class="line">    --rpcvhosts &quot;*&quot;\</span><br><span class="line">    --mine\</span><br><span class="line">    --etherbase 0xdbeb69c655b666b3e17b8061df7ea4cc2399df11\</span><br><span class="line">    --unlock 0xdbeb69c655b666b3e17b8061df7ea4cc2399df11\</span><br><span class="line">    --password ./password\</span><br><span class="line">    --nodiscover\</span><br><span class="line">    --maxpeers &apos;50&apos;\</span><br><span class="line">    --networkid 378\</span><br><span class="line">    --targetgaslimit 471238800\</span><br><span class="line">    &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="部署合约"><a href="#部署合约" class="headerlink" title="部署合约"></a>部署合约</h3><p>按先后顺序如下部署</p>
+<ol>
+<li><a href="https://github.com/ChungkueiBlock/sols/blob/master/fomo3d/Hourglass.sol" target="_blank" rel="noopener">p3d合约</a></li>
+</ol>
+<p>真心不推荐部署带有p3d合约的游戏，这样项目方就可以吃掉本来要流到这里25%左右的流水资金了</p>
+<p>我对p3d的合约内容还没有很深的研究，只知道它</p>
+<ul>
+<li>是一个自带“交易所”、发行总量为0的Token，</li>
+<li>通过Eth买入会自动增发，卖出会销毁</li>
+<li>买入和卖出都会扣掉10%的费用给仍持有Token的人</li>
+<li>每买一次都会使Token升值</li>
+<li>每卖一次会使Token降价</li>
+</ul>
+<p>这个合约不需要改动，贴源码，编译后部署截图如下，点击红色记录下来部署后的合约地址</p>
+<p><img src="/uploads/fomo3d/fomo-deploy/p3d-deploy.jpg" alt="p3d"></p>
+<ol start="2">
+<li>部署divies合约</li>
+</ol>
+<p>这个合约专门往p3d持有者发分红的。</p>
+<p>把刚才记录的p3d合约地址，替换到<code>HourglassInterface</code>后面的地址。如上贴源码，编译后部署<code>Divies</code>合约，</p>
+<p>记录下divies的地址，并替换fomo3dlong.sol里的<code>DiviesInterface</code>地址</p>
+<ol start="3">
+<li><del>部署JIincForwarder合约</del></li>
+</ol>
+<p>这个合约是管理流向社区2%的资金的，被fomo3dlong里调用，<br>这里需要hack，因为其中涉及到一个闭源的合约，既然知道它是管理2%资金流向的，那直接在fomo3dLong的合约如下hack</p>
+<ul>
+<li>把定义<code>Jekyll_Island_Inc</code>的地方，直接定义成一个普通地址 <code>address reward = 0xxxxxxx;</code></li>
+<li>把调用Jekyll_Island_Inc的地方， 写成<code>reward.transfer(_com);</code>， 注意有两个地方调用（都要换），一个是游戏进行时调用，一个是本轮结束后调用</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// // community rewards</span></span><br><span class="line"><span class="comment">// if (!address(Jekyll_Island_Inc).call.value(_com)(bytes4(keccak256("deposit()"))))</span></span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//     // This ensures Team Just cannot influence the outcome of FoMo3D with</span></span><br><span class="line"><span class="comment">//     // bank migrations by breaking outgoing transactions.</span></span><br><span class="line"><span class="comment">//     // Something we would never do. But that's not the point.</span></span><br><span class="line"><span class="comment">//     // We spent 2000$ in eth re-deploying just to patch this, we hold the </span></span><br><span class="line"><span class="comment">//     // highest belief that everything we create should be trustless.</span></span><br><span class="line"><span class="comment">//     // Team JUST, The name you shouldn't have to trust.</span></span><br><span class="line"><span class="comment">//     _p3d = _p3d.add(_com);</span></span><br><span class="line"><span class="comment">//     _com = 0;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">reward.transfer(_com);</span><br></pre></td></tr></table></figure>
+<p>所以不需要部署这个合约，你只要想办法把流到这里的ETH，流到平台方就可以了。（流到开发者，我觉得也是可以的，哈哈～）</p>
+<ol start="4">
+<li>部署Team合约</li>
+</ol>
+<p>这个合约利用多签技术限制了影响团队的操作，需要改的地方就是把这些地址全部换成自己的，</p>
+<p>值得注意的是<code>deployer</code>地址，改成部署合约的地址，后面调用playbook合约时需要这里的权限</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">address inventor = <span class="number">0x18E90Fc6F70344f53EBd4f6070bf6Aa23e2D748C</span>;</span><br><span class="line">address mantso   = <span class="number">0x8b4DA1827932D71759687f925D17F81Fc94e3A9D</span>;</span><br><span class="line">address justo    = <span class="number">0x8e0d985f3Ec1857BEc39B76aAabDEa6B31B67d53</span>;</span><br><span class="line">address sumpunk  = <span class="number">0x7ac74Fcc1a71b106F12c55ee8F802C9F672Ce40C</span>;</span><br><span class="line">address deployer = <span class="number">0xF39e044e1AB204460e06E87c6dca2c6319fC69E3</span>;</span><br><span class="line"></span><br><span class="line">admins_[inventor] = Admin(<span class="literal">true</span>, <span class="literal">true</span>, <span class="string">"inventor"</span>);</span><br><span class="line">admins_[mantso]   = Admin(<span class="literal">true</span>, <span class="literal">true</span>, <span class="string">"mantso"</span>);</span><br><span class="line">admins_[justo]    = Admin(<span class="literal">true</span>, <span class="literal">true</span>, <span class="string">"justo"</span>);</span><br><span class="line">admins_[sumpunk]  = Admin(<span class="literal">true</span>, <span class="literal">true</span>, <span class="string">"sumpunk"</span>);</span><br><span class="line">admins_[deployer] = Admin(<span class="literal">true</span>, <span class="literal">true</span>, <span class="string">"deployer"</span>);</span><br></pre></td></tr></table></figure>
+<p>改完后，如上贴源码，编译后部署<code>TeamJust</code>合约，记录地址，替换playbook合约的<code>TeamJustInterface</code>地址</p>
+<ol start="5">
+<li>部署playerBook合约</li>
+</ol>
+<p>很有意思的合约，这里就是上面说的整个游戏其实只需要两个合约中的一个。<br>不解读细节了，直接改吧</p>
+<p>你会发现这里怎么还有个<code>JIincForwarderInterface</code>地址，第三步不是说不部署这个了么 ？</p>
+<p>这里的主要是收取别人注册名字开启邀请返佣机制时需要支付的那0.01ETH的</p>
+<p>知道了这个，就跟第3步一样加个收款地址吧，细节不标</p>
+<p>如上贴源码，编译后部署<code>PlayBook</code>合约，记录下地址， 替换fomo3d合约里的<code>PlayerBookInterface</code>地址。</p>
+<ol start="6">
+<li>部署fomo3dLong合约</li>
+</ol>
+<p>这个是另一个核心合约之一，这里也有个闭源合约，用来初始化控制时间的参数</p>
+<p>直接注释掉，然后如下改动</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint256 private rndExtra_ = <span class="number">30</span>;     <span class="comment">// 和rndInit一起控制第一轮游戏开始的初始时间的，单位是秒</span></span><br><span class="line">uint256 private rndGap_ = <span class="number">30</span>;         <span class="comment">// 和rndInit一起控制下轮游戏开始的初始时间的，单位是秒</span></span><br></pre></td></tr></table></figure>
+<p>还有两个改动点就是<code>activate</code>和<code>setOtherFomo</code>里加上自己的deployer地址， </p>
+<p>额外把setOtherFomo里的往另一个游戏池子里输血的功能改到，因为我们没有其他的游戏，如第三步一样，换个收款码吧</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otherF3D_.transfer(_long);</span><br></pre></td></tr></table></figure>
+<p>部署吧！！！</p>
+<p>最后部署这一步，很有可能遇到<code>errored: oversized data</code>的错误，刷新remix页面即可。</p>
+<h3 id="合约设置"><a href="#合约设置" class="headerlink" title="合约设置"></a>合约设置</h3><p>先setOtherFomo,然后再设置playbook里的addgame，最后activate即可。</p>
+<h3 id="页面"><a href="#页面" class="headerlink" title="页面"></a>页面</h3><p>页面直接Ctrl+s下载原版界面，把最后的fomo3dLong的合约地址替换下，另外那个后台API，其实没什么，自己试下就知道了，然后就可以上线了。。。</p>
+<p><img src="/uploads/fomo3d/fomo-deploy/fomo3d-online.png" alt="fomo3d上线"></p>
+<h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><ul>
+<li>合约debug难如上青天</li>
+</ul>
+<p>目前我们搞出来的定制版有：</p>
+<ul>
+<li>多级返佣模式， 可自定义级数</li>
+<li>空投fix版</li>
+<li>去除战队版</li>
+<li>移除p3d版本</li>
+<li>原版</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat/ent.png" alt="ChungkueiBlock wechat" style="width: 200px; max-width: 100%;"/>
+    <div>群技术交流  //备注 我是钟馗</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ChungkueiBlock</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2018/07/28/fomo-deploy/" title="fomo3d-上线部署要点">http://yoursite.com/2018/07/28/fomo-deploy/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 CC BY-NC-SA 3.0 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fomo3d/" rel="tag"># fomo3d</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/fomo-eth/" rel="next" title="fomo3d-ETH进入后都去哪儿了">
+                <i class="fa fa-chevron-left"></i> fomo3d-ETH进入后都去哪儿了
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars2.githubusercontent.com/u/41499501?s=200&v=4"
+                alt="ChungkueiBlock" />
+            
+              <p class="site-author-name" itemprop="name">ChungkueiBlock</p>
+              <p class="site-description motion-element" itemprop="description">区块链技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ChungkueiBlock" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fomo3d-上线部署要点"><span class="nav-number">1.</span> <span class="nav-text">fomo3d-上线部署要点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#部署前的准备"><span class="nav-number">1.1.</span> <span class="nav-text">部署前的准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署合约"><span class="nav-number">1.2.</span> <span class="nav-text">部署合约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合约设置"><span class="nav-number">1.3.</span> <span class="nav-text">合约设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面"><span class="nav-number">1.4.</span> <span class="nav-text">页面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感受"><span class="nav-number">2.</span> <span class="nav-text">感受</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ChungkueiBlock</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
